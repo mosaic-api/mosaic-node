@@ -7,6 +7,9 @@
     },
     "sourceType": "module"
   },
+  "globals": {
+    "QUnit": false
+  },
   "env": {
     "node": true,
     "es6": true
