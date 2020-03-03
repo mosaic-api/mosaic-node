@@ -5,7 +5,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-const request = require('superagent');
+// const request = require('superagent');
 
 // Initiate database connection
 const client = require('./lib/client');
@@ -87,6 +87,24 @@ app.post('/api/user/saved', async (req, res) => {
     }
 });
 
+app.put('/api/user/saved/:id', async (req, res) => {
+    try {
+        const savedGameboard = await client.query(`
+        UPDATE gameboards
+        SET game_board=$1
+        WHERE id =$2
+        RETURNING *;
+        `, [req.body.game_board, req.params.id]);
+        res.json(savedGameboard.rows[0]);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err.message || err
+        });
+    }
+});
+
 app.delete('/api/user/saved/:id', async (req, res) => {
     try {
         const delGameboard = await client.query(`
@@ -106,7 +124,7 @@ app.delete('/api/user/saved/:id', async (req, res) => {
 });
 
 app.get('*', (req, res) => {
-    res.send('No favorites are here...');
+    res.send('No gameboards are here...');
 });
 
 // Start the server
