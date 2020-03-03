@@ -87,23 +87,23 @@ app.post('/api/user/saved', async (req, res) => {
     }
 });
 
-// app.delete('/api/me/favorites/:id', async (req, res) => {
-//     try {
-//         const delFavorite = await client.query(`
-//         DELETE FROM favorites
-//         WHERE favorites.id=$1
-//         RETURNING *
-//         `, [req.params.id]);
+app.delete('/api/user/saved/:id', async (req, res) => {
+    try {
+        const delGameboard = await client.query(`
+        DELETE FROM gameboards
+        WHERE gameboards.id=$1
+        RETURNING *
+        `, [req.params.id]);
         
-//         res.json(delFavorite.rows);
-//     }
-//     catch (err) {
-//         console.log(err);
-//         res.status(500).json({
-//             error: err.message || err
-//         });
-//     }
-// });
+        res.json(delGameboard.rows);
+    }
+    catch (err) {
+        console.log(err);
+        res.status(500).json({
+            error: err.message || err
+        });
+    }
+});
 
 app.get('*', (req, res) => {
     res.send('No favorites are here...');
