@@ -7,7 +7,7 @@ async function run() {
     try {
         // run a query to create tables
         await client.query(`
-            DROP TABLE IF EXISTS favorites;
+            DROP TABLE IF EXISTS gameboards;
             DROP TABLE IF EXISTS users;
         `);
 

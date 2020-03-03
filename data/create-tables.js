@@ -9,16 +9,15 @@ async function run() {
         await client.query(`
             CREATE TABLE users (
                 id SERIAL PRIMARY KEY,
+                name VARCHAR(256) NOT NULL,
                 email VARCHAR(256) NOT NULL,
                 hash VARCHAR(512) NOT NULL
             );
         
-            CREATE TABLE favorites (
+            CREATE TABLE gameboards (
                 id SERIAL PRIMARY KEY,
-                name VARCHAR(256) NOT NULL,
-                rating FLOAT NOT NULL,
-                background_image VARCHAR(256) NOT NULL,
-                released VARCHAR(256) NOT NULL,
+                board_name VARCHAR(256) NOT NULL,
+                game_board VARCHAR(1024) NOT NULL,
                 user_id INTEGER NOT NULL REFERENCES users(id)
             );
         `);
