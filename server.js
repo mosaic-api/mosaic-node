@@ -27,7 +27,7 @@ const createAuthRoutes = require('./lib/auth/create-auth-routes');
 const authRoutes = createAuthRoutes({
     selectUser(email) {
         return client.query(`
-            SELECT id, email, hash 
+            SELECT id, name, email, hash 
             FROM users
             WHERE email = $1;
         `,
@@ -36,11 +36,11 @@ const authRoutes = createAuthRoutes({
     },
     insertUser(user, hash) {
         return client.query(`
-            INSERT into users (email, hash)
-            VALUES ($1, $2)
-            RETURNING id, email;
+            INSERT into users (email, hash, name)
+            VALUES ($1, $2, $3)
+            RETURNING id, email, name;
         `,
-        [user.email, hash]
+        [user.email, hash, user.name]
         ).then(result => result.rows[0]);
     }
 });
@@ -51,71 +51,71 @@ const ensureAuth = require('./lib/auth/ensure-auth');
 app.use('/api/me', ensureAuth);
 
 // API Routes
-app.get('/api/videogames', async (req, res) => {
-    try {
-        const data = await request.get(`https://api.rawg.io/api/games?search=${req.query.search}`);
-        res.json(data.body);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: err.message || err
-        });
-    }
-});
+// app.get('/api/videogames', async (req, res) => {
+//     try {
+//         const data = await request.get(`https://api.rawg.io/api/games?search=${req.query.search}`);
+//         res.json(data.body);
+//     }
+//     catch (err) {
+//         console.log(err);
+//         res.status(500).json({
+//             error: err.message || err
+//         });
+//     }
+// });
 
-app.get('/api/me/favorites', async (req, res) => {
-    try {
-        const myQuery = `
-        SELECT * FROM favorites
-        WHERE user_id=$1
-        `;
-        const favorites = await client.query(myQuery, [req.userId]);
-        res.json(favorites.rows);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: err.message || err
-        });
-    }
-});
+// app.get('/api/me/favorites', async (req, res) => {
+//     try {
+//         const myQuery = `
+//         SELECT * FROM favorites
+//         WHERE user_id=$1
+//         `;
+//         const favorites = await client.query(myQuery, [req.userId]);
+//         res.json(favorites.rows);
+//     }
+//     catch (err) {
+//         console.log(err);
+//         res.status(500).json({
+//             error: err.message || err
+//         });
+//     }
+// });
 
-app.post('/api/me/favorites', async (req, res) => {
-    try {
-        const newFavorites = await client.query(`
-        INSERT INTO favorites (name, rating, background_image, released, user_id)
-        values ($1, $2, $3, $4, $5)
-        RETURNING *
-        `, [req.body.name, req.body.rating, req.body.background_image, req.body.released, req.userId]);
+// app.post('/api/me/favorites', async (req, res) => {
+//     try {
+//         const newFavorites = await client.query(`
+//         INSERT INTO favorites (name, rating, background_image, released, user_id)
+//         values ($1, $2, $3, $4, $5)
+//         RETURNING *
+//         `, [req.body.name, req.body.rating, req.body.background_image, req.body.released, req.userId]);
         
-        res.json(newFavorites.rows[0]);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: err.message || err
-        });
-    }
-});
+//         res.json(newFavorites.rows[0]);
+//     }
+//     catch (err) {
+//         console.log(err);
+//         res.status(500).json({
+//             error: err.message || err
+//         });
+//     }
+// });
 
-app.delete('/api/me/favorites/:id', async (req, res) => {
-    try {
-        const delFavorite = await client.query(`
-        DELETE FROM favorites
-        WHERE favorites.id=$1
-        RETURNING *
-        `, [req.params.id]);
+// app.delete('/api/me/favorites/:id', async (req, res) => {
+//     try {
+//         const delFavorite = await client.query(`
+//         DELETE FROM favorites
+//         WHERE favorites.id=$1
+//         RETURNING *
+//         `, [req.params.id]);
         
-        res.json(delFavorite.rows);
-    }
-    catch (err) {
-        console.log(err);
-        res.status(500).json({
-            error: err.message || err
-        });
-    }
-});
+//         res.json(delFavorite.rows);
+//     }
+//     catch (err) {
+//         console.log(err);
+//         res.status(500).json({
+//             error: err.message || err
+//         });
+//     }
+// });
 
 app.get('*', (req, res) => {
     res.send('No favorites are here...');
