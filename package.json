@@ -25,9 +25,9 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "exit 0",
-    "start": "node server.js",
-    "start:watch": "nodemon --ignore public server.js",
+    "test": "jest --detectOpenHandles",
+    "start": "node index.js",
+    "start:watch": "nodemon --ignore public index.js",
     "create-tables": "node data/create-tables.js",
     "drop-tables": "node data/drop-tables.js",
     "recreate-tables": "npm run drop-tables && npm run create-tables",
