@@ -18,6 +18,8 @@ async function run() {
                 id SERIAL PRIMARY KEY,
                 board_name VARCHAR(256) NOT NULL,
                 game_board VARCHAR(1024) NOT NULL,
+                scheme VARCHAR(256) NOT NULL,
+                mode VARCHAR(256) NOT NULL,
                 user_id INTEGER NOT NULL REFERENCES users(id)
             );
         `);
