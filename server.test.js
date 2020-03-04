@@ -57,3 +57,32 @@ describe('/POST /api/user/saved', () => {
             done();
         });
 });
+
+describe('/PUT /api/user/saved/5', () => {
+    test('It should respond with an object of the correct shape',
+    // get the done function to call after the test
+        async (done) => {
+            // feed our express app to the supertest request
+            const response = await request(app)
+                // and hit out express app's about route with a /GET
+                .put('/api/user/saved/5')
+                .send({
+                    game_board: 'somethingelse2',
+                    scheme: 'scheming',
+                    mode: 'moding'
+                })
+                .set('Authorization', token);
+            // check to see if the response is what we expect
+            expect(response.body).toEqual({
+                id: expect.any(Number),
+                board_name: expect.any(String), 
+                game_board: expect.any(String), 
+                scheme: expect.any(String),
+                mode: expect.any(String),
+                user_id: expect.any(Number)
+            });
+            // it should have a status of 200
+            expect(response.statusCode).toBe(200);
+            done();
+        });
+});
