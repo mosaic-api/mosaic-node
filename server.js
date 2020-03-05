@@ -72,10 +72,10 @@ app.get('/api/user/saved', async (req, res) => {
 app.post('/api/user/saved', async (req, res) => {
     try {
         const newGameboard = await client.query(`
-        INSERT INTO gameboards (board_name, game_board, scheme, mode, user_id)
+        INSERT INTO gameboards (board_name, game_board, scheme, music_board, user_id)
         values ($1, $2, $3, $4, $5)
         RETURNING *
-        `, [req.body.board_name, req.body.game_board, req.body.scheme, req.body.mode, req.userId]);
+        `, [req.body.board_name, req.body.game_board, req.body.scheme, req.body.music_board, req.userId]);
         
         res.json(newGameboard.rows[0]);
     }
@@ -93,10 +93,10 @@ app.put('/api/user/saved/:id', async (req, res) => {
         UPDATE gameboards
         SET game_board=$1,
             scheme=$2,
-            mode=$3
+            music_board=$3
         WHERE id =$4
         RETURNING *;
-        `, [req.body.game_board, req.body.scheme, req.body.mode, req.params.id]);
+        `, [req.body.game_board, req.body.scheme, req.body.music_board, req.params.id]);
         res.json(savedGameboard.rows[0]);
     }
     catch (err) {
