@@ -17,9 +17,9 @@ async function run() {
             CREATE TABLE gameboards (
                 id SERIAL PRIMARY KEY,
                 board_name VARCHAR(256) NOT NULL,
-                game_board VARCHAR(8000) NOT NULL,
+                game_board VARCHAR(2000) NOT NULL,
                 scheme VARCHAR(256) NOT NULL,
-                music_board VARCHAR(8000) NOT NULL,
+                music_board VARCHAR(2000) NOT NULL,
                 user_id INTEGER NOT NULL REFERENCES users(id)
             );
         `);
